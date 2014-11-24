@@ -19,6 +19,9 @@ vendor/firmware/bcm2079xB4_pre_firmware.ncd
 vendor/firmware/bcm2079xB5_firmware.ncd
 vendor/firmware/bcm2079xB5_pre_firmware.ncd
 
+# FeliCa
+lib/libcordon.so
+
 # Qualcomm framework
 vendor/lib/libdiag.so
 vendor/lib/libdsutils.so
