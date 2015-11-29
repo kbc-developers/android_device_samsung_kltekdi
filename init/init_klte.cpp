@@ -44,6 +44,18 @@ void gsm_properties()
     property_set("ro.ril.enable.dcm.feature", "1");
 }
 
+void cdma_properties(char const *default_cdma_sub,
+        char const *operator_numeric, char const *operator_alpha)
+{
+    property_set("ril.subscription.types", "NV,RUIM");
+    property_set("ro.cdma.home.operator.numeric", operator_numeric);
+    property_set("ro.cdma.home.operator.alpha", operator_alpha);
+    property_set("ro.telephony.default_cdma_sub", default_cdma_sub);
+    property_set("ro.telephony.default_network", "5");
+    property_set("ro.telephony.ril.config", "newDriverCallU,newDialCode");
+    property_set("telephony.lteOnCdmaDevice", "1");
+}
+
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
     char platform[PROP_VALUE_MAX];
@@ -57,9 +69,9 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     if (!rc || !ISMATCH(platform, ANDROID_TARGET))
         return;
 
-    property_set("ro.build.fingerprint", "samsung/SC-04F/SC-04F:5.0/LRX21T/SC04FOMU1WOI2:user/release-keys");
-    property_set("ro.build.description", "kltedcm-user 5.0 LRX21T SC04FOMU1WOI2 release-keys");
-    property_set("ro.product.model", "SC-04F");
-    property_set("ro.product.device", "kltedcm");
-    gsm_properties();
+    property_set("ro.build.fingerprint", "samsung/SCL23/SCL23:5.0/LRX21T/SC04FOMU1WOI2:user/release-keys");
+    property_set("ro.build.description", "kltekdi-user 5.0 LRX21T SC04FOMU1WOI2 release-keys");
+    property_set("ro.product.model", "SCL23");
+    property_set("ro.product.device", "kltekdi");
+    cdma_properties("1", "44054", "kltekdi");
 }
