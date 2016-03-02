@@ -20,7 +20,7 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product-if-exists, vendor/aojp/config/aojp.mk)
 
 # Get non-open-source specific aspects
-$(call inherit-product-if-exists, vendor/samsung/klte/klte-vendor.mk)
+$(call inherit-product-if-exists, vendor/samsung/kltekdi/kltekdi-vendor.mk)
 #$(call inherit-product-if-exists, vendor/samsung/kltedcm/kltedcm-vendor.mk)
 $(call inherit-product-if-exists, vendor/samsung/kltekdi-felica-common/felica-common-vendor.mk)
 
