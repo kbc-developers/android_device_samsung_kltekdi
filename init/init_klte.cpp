@@ -28,12 +28,17 @@
  */
 
 #include <stdlib.h>
+<<<<<<< HEAD
+=======
+#include <stdio.h>
+>>>>>>> fetch130
 
 #include "vendor_init.h"
 #include "property_service.h"
 #include "log.h"
 #include "util.h"
 
+<<<<<<< HEAD
 #include "init_msm.h"
 
 void gsm_properties()
@@ -43,6 +48,11 @@ void gsm_properties()
     property_set("ro.telephony.ril.config", "newDialCode");
     property_set("ro.ril.enable.dcm.feature", "1");
 }
+=======
+#include "init_msm8974.h"
+
+#define ISMATCH(a, b) (!strncmp((a), (b), PROP_VALUE_MAX))
+>>>>>>> fetch130
 
 void cdma_properties(char const *default_cdma_sub,
         char const *operator_numeric, char const *operator_alpha)
@@ -51,11 +61,16 @@ void cdma_properties(char const *default_cdma_sub,
     property_set("ro.cdma.home.operator.numeric", operator_numeric);
     property_set("ro.cdma.home.operator.alpha", operator_alpha);
     property_set("ro.telephony.default_cdma_sub", default_cdma_sub);
+<<<<<<< HEAD
     property_set("ro.telephony.default_network", "5");
+=======
+    property_set("ro.telephony.default_network", "10");
+>>>>>>> fetch130
     property_set("ro.telephony.ril.config", "newDriverCallU,newDialCode");
     property_set("telephony.lteOnCdmaDevice", "1");
 }
 
+<<<<<<< HEAD
 void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *board_type)
 {
     char platform[PROP_VALUE_MAX];
@@ -65,13 +80,40 @@ void init_msm_properties(unsigned long msm_id, unsigned long msm_ver, char *boar
     UNUSED(msm_ver);
     UNUSED(board_type);
 
+=======
+void init_target_properties()
+{
+    char platform[PROP_VALUE_MAX];
+    char bootloader[PROP_VALUE_MAX];
+    char device[PROP_VALUE_MAX];
+    char devicename[PROP_VALUE_MAX];
+    int rc;
+
+>>>>>>> fetch130
     rc = property_get("ro.board.platform", platform);
     if (!rc || !ISMATCH(platform, ANDROID_TARGET))
         return;
 
+<<<<<<< HEAD
     property_set("ro.build.fingerprint", "samsung/SCL23/SCL23:5.0/LRX21T/SC04FOMU1WOI2:user/release-keys");
     property_set("ro.build.description", "kltekdi-user 5.0 LRX21T SC04FOMU1WOI2 release-keys");
     property_set("ro.product.model", "SCL23");
     property_set("ro.product.device", "kltekdi");
     cdma_properties("1", "44054", "kltekdi");
 }
+=======
+    property_get("ro.bootloader", bootloader);
+
+        property_set("ro.build.fingerprint", "samsung/SCL23/SCL23:4.4.2/KOT49H/SCL23KDU1AND1:user/release-keys");
+        property_set("ro.build.description", "kltekdi-user 4.4.2 KOT49H SCL23KDU1AND1 release-keys");
+        property_set("ro.product.model", "SCL23");
+        property_set("ro.product.device", "kltekdi");
+        property_set("telephony.sms.pseudo_multipart", "1");
+        cdma_properties("1", "44054", "KDDI");
+
+    property_get("ro.product.device", device);
+    strlcpy(devicename, device, sizeof(devicename));
+    INFO("Found bootloader id %s setting build properties for %s device\n", bootloader, devicename);
+}
+
+>>>>>>> fetch130
