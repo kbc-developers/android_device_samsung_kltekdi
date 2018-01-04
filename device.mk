@@ -21,14 +21,14 @@ $(call inherit-product, $(SRC_TARGET_DIR)/product/languages_full.mk)
 $(call inherit-product-if-exists, vendor/aojp/config/aojp.mk)
 
 # Get non-open-source specific aspects
+$(call inherit-product-if-exists, vendor/samsung/klte/klte-vendor.mk)
 $(call inherit-product-if-exists, vendor/samsung/kltekdi/kltekdi-vendor.mk)
-#$(call inherit-product-if-exists, vendor/samsung/kltedcm/kltedcm-vendor.mk)
 $(call inherit-product-if-exists, vendor/samsung/kltekdi-felica-common/felica-common-vendor.mk)
 
 # Overlays
 DEVICE_PACKAGE_OVERLAYS += $(LOCAL_PATH)/overlay
 
-DEVICE_NFC_SONY=yes
+DEVICE_NFC_SONY := yes
 
 # Ramdisk for FeliCa
 PRODUCT_PACKAGES += \
@@ -36,9 +36,14 @@ PRODUCT_PACKAGES += \
     init.felica.sh
 
 PRODUCT_COPY_FILES += \
-    $(LOCAL_PATH)/configs/libnfc-brcm.conf:system/etc/libnfc-brcm.conf \
-    $(LOCAL_PATH)/configs/libnfc-nxp.conf:system/etc/libnfc-nxp.conf \
-    $(LOCAL_PATH)/configs/nfcee_access.xml:system/etc/nfcee_access.xml
+    $(LOCAL_PATH)/configs/libnfc-brcm.conf:system/vendor/etc/libnfc-brcm.conf \
+    $(LOCAL_PATH)/configs/libnfc-nxp.conf:system/vendor/etc/libnfc-nxp.conf \
+    $(LOCAL_PATH)/configs/nfcee_access.xml:system/vendor/etc/nfcee_access.xml
+
+#Smart card service for felica
+#TARGET_ENABLE_SMARTCARD_SERVICE := true
+PRODUCT_PACKAGES += \
+    org.simalliance.openmobileapi.xml org.simalliance.openmobileapi
 
 # common klte
 $(call inherit-product, device/samsung/klte-common/klte.mk)

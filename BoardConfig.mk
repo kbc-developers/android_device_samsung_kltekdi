@@ -1,4 +1,5 @@
-# Copyright (C) 2014 The CyanogenMod Project
+# Copyright (C) 2014-2016 The CyanogenMod Project
+# Copyright (C) 2017 The LineageOS Project
 #
 # Licensed under the Apache License, Version 2.0 (the "License");
 # you may not use this file except in compliance with the License.
@@ -15,18 +16,20 @@
 # inherit from common klte
 -include device/samsung/klte-common/BoardConfigCommon.mk
 
+PRODUCT_RESTRICT_VENDOR_FILES := false
+
 TARGET_OTA_ASSERT_DEVICE := kltekdi,klte
 
 # Kernel
-TARGET_KERNEL_VARIANT_CONFIG := msm8974pro_sec_klte_kdi_defconfig
+TARGET_KERNEL_CONFIG := lineage_kltekdi_defconfig
 
 # Init
 TARGET_INIT_VENDOR_LIB := libinit_msm8974
 TARGET_LIBINIT_MSM8974_DEFINES_FILE := device/samsung/kltekdi/init/init_klte.cpp
-TARGET_UNIFIED_DEVICE := true
 
 # NFC
 BOARD_NFC_CHIPSET := sony
+BOARD_NFC_HAL_SUFFIX := msm8974
 
 # Partitions
 BOARD_BOOTIMAGE_PARTITION_SIZE := 13631488
@@ -37,3 +40,4 @@ BOARD_USERDATAIMAGE_PARTITION_SIZE := 28222406144
 
 # inherit from the proprietary version
 -include vendor/samsung/kltekdi/BoardConfigVendor.mk
+-include vendor/samsung/klte/BoardConfigVendor.mk

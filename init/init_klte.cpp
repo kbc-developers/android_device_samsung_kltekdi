@@ -1,5 +1,7 @@
 /*
-   Copyright (c) 2013, The Linux Foundation. All rights reserved.
+   Copyright (c) 2016, The Linux Foundation. All rights reserved.
+   Copyright (c) 2017, The LineageOS Project. All rights reserved.
+
    Redistribution and use in source and binary forms, with or without
    modification, are permitted provided that the following conditions are
    met:
@@ -12,6 +14,7 @@
     * Neither the name of The Linux Foundation nor the names of its
       contributors may be used to endorse or promote products derived
       from this software without specific prior written permission.
+
    THIS SOFTWARE IS PROVIDED "AS IS" AND ANY EXPRESS OR IMPLIED
    WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED WARRANTIES OF
    MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT
@@ -28,41 +31,60 @@
 #include <stdlib.h>
 #include <stdio.h>
 
-#include "vendor_init.h"
+#include <android-base/properties.h>
+
 #include "property_service.h"
+#include "vendor_init.h"
 #include "log.h"
-#include "util.h"
 
 #include "init_msm8974.h"
 
-void cdma_properties(char const *default_cdma_sub,
-        char const *operator_numeric, char const *operator_alpha)
+using android::base::GetProperty;
+
+void set_rild_libpath(char const *variant)
 {
-    property_set("ril.subscription.types", "NV,RUIM");
-    property_set("ro.cdma.home.operator.numeric", operator_numeric);
+    std::string libpath("/system/vendor/lib/libsec-ril.");
+    libpath += variant;
+    libpath += ".so";
+
+    property_override("rild.libpath", libpath.c_str());
+}
+
+void cdma_properties(char const *operator_alpha,
+        char const *operator_numeric,
+        char const *default_network,
+        char const *rild_lib_variant)
+{
+    /* Dynamic CDMA Properties */
     property_set("ro.cdma.home.operator.alpha", operator_alpha);
-    property_set("ro.telephony.default_cdma_sub", default_cdma_sub);
-    property_set("ro.telephony.default_network", "10");
-    property_set("ro.telephony.ril.config", "newDriverCallU,newDialCode");
+    property_set("ro.cdma.home.operator.numeric", operator_numeric);
+    property_set("ro.telephony.default_network", default_network);
+    set_rild_libpath(rild_lib_variant);
+
+    /* Static CDMA Properties */
+    property_set("ril.subscription.types", "NV,RUIM");
+    property_set("ro.telephony.default_cdma_sub", "1");	//kdi is "1"
     property_set("telephony.lteOnCdmaDevice", "1");
 }
 
+
 void init_target_properties()
 {
-    std::string platform = property_get("ro.board.platform");
-    if (platform != ANDROID_TARGET)
-        return;
+    //std::string platform = GetProperty("ro.board.platform", "");
+    //if (platform != ANDROID_TARGET)
+    //    return;
 
-    std::string bootloader = property_get("ro.bootloader");
+    std::string bootloader = GetProperty("ro.bootloader","");
 
-    property_set("ro.build.fingerprint", "KDDI/SCL23/SCL23:6.0.1/MMB29M/SCL23KDU1DQA4:user/release-keys");
-    property_set("ro.build.description", "kltekdi-user 6.0.1 MMB29M SCL23KDU1DQA4 release-keys");
-    property_set("ro.product.model", "SCL23");
-    property_set("ro.product.device", "SCL23");
-    property_set("telephony.sms.pseudo_multipart", "1");
-    cdma_properties("1", "44054", "KDDI");
+    property_override("ro.build.fingerprint", "KDDI/SCL23/SCL23:6.0.1/MMB29M/SCL23KDU1DQA4:user/release-keys");
+    property_override("ro.build.description", "kltekdi-user 6.0.1 MMB29M SCL23KDU1DQA4 release-keys");
+    property_override("ro.product.model", "SCL23");
+    property_override("ro.product.device", "SCL23");
+    property_override("telephony.sms.pseudo_multipart", "1");
+	  cdma_properties("KDDI", "44054", "10", "vzw");
 
-    std::string device = property_get("ro.product.device");
-    INFO("Found bootloader id %s setting build properties for %s device\n", bootloader.c_str(), device.c_str());
+    std::string device = GetProperty("ro.product.device", "");
+    LOG(INFO) << "Found bootloader id " << bootloader <<  " setting build properties for "
+	    << device <<  " device" << std::endl;
 }
 

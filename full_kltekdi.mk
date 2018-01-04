@@ -15,11 +15,8 @@
 # Inherit from those products. Most specific first.
 $(call inherit-product, $(SRC_TARGET_DIR)/product/full_base_telephony.mk)
 
-# Inherit from kltespr device
+# Inherit from kltedc device
 $(call inherit-product, device/samsung/kltekdi/device.mk)
-
-# FeliCa vendor tree
-$(call inherit-product-if-exists, vendor/samsung/felica-common/felica-common-vendor.mk)
 
 # Set those variables here to overwrite the inherited values.
 PRODUCT_NAME := full_kltekdi
